@@ -231,6 +231,7 @@ subroutine compute_ec(d,q,er,ec)
   integer :: i
   integer :: j
 
+  ec = .false.
   do j = 1, d
     do i = 1, d
       if ((q(i,j) == 2).and.(er(i).eqv..false.)) then
