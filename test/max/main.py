@@ -33,5 +33,5 @@ for row, column in indexes:
 #print(f'total cost: {total}')
 
 for row, col in indexes:
-    print(f'{col+1}',end='')
+    print("%02d" % (col+1),end='')
 print(f':{total}')

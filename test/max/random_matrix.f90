@@ -4,7 +4,7 @@ program main
 
   implicit none
 
-  integer, parameter :: D = 8
+  integer, parameter :: D = 20
 
   integer, dimension(3,3) :: m
   integer :: i

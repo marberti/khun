@@ -4,7 +4,7 @@ program main
 
   implicit none
 
-  integer, parameter :: d = 8
+  integer, parameter :: d = 20
   integer, dimension(d,d) :: m
   integer, dimension(d) :: ind
   integer :: sum
@@ -18,7 +18,7 @@ program main
 
 !  call khun(d,m,ind,sum,verbose=.true.)
   call khun(d,m,ind,sum,verbose=.false.)
-  write(*,'(8(I1))',advance="no") ind
+  write(*,'(20(I0.2))',advance="no") ind
   write(sum_str,*) sum
   sum_str = adjustl(sum_str)
   write(*,'(A)') ":"//trim(sum_str)
