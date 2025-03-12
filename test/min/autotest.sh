@@ -1,6 +1,6 @@
 #! /bin/bash
 
-khun_x="../../khun.x max"
+khun_x="../../khun.x min"
 
 counter=0
 while true

@@ -14,18 +14,22 @@ contains
 ! Public
 !==============================================================================
 
-subroutine khun(d,m,ind,sum,verbose)
+subroutine khun(d,m,mode,ind,sum,verbose)
 
   integer, intent(in) :: d
   integer, dimension(d,d), intent(in) :: m
+  character(*), intent(in) :: mode
   integer, dimension(d), intent(out) :: ind
   integer, intent(out) :: sum
   logical, intent(in), optional :: verbose
 
   character(*), parameter :: my_name = "khun"
   logical :: verbose_flag
+  logical :: min_flag
   integer :: i
   integer :: j
+  integer :: m_max
+  integer, dimension(d,d) :: work_m
   integer, dimension(d) :: u
   integer, dimension(d) :: v
   integer, dimension(d,d) :: q
@@ -40,6 +44,17 @@ subroutine khun(d,m,ind,sum,verbose)
     verbose_flag = .false.
   end if
 
+  min_flag = .false.
+  select case (mode)
+  case ("max")
+    ! default behavior
+  case ("min")
+    min_flag = .true.
+  case default
+    write(*,*) "Error: "//my_name//": unknown mode "//trim(mode)//": exit"
+    return
+  end select
+
   if (verbose_flag) then
     write(*,*) "Entering "//my_name//" subroutine"
     write(*,*) "Input matrix m ="
@@ -49,9 +64,25 @@ subroutine khun(d,m,ind,sum,verbose)
       end do
       write(*,*)
     end do
+    if (min_flag) then
+      write(*,*) "Want to compute: minimum sum"
+    else
+      write(*,*) "Want to compute: maximum sum"
+    end if
   end if
 
-  call initial_cover(d,m,u,v)
+  if (min_flag) then
+    m_max = maxval(m)
+    do i = 1, d
+      do j = 1, d
+        work_m(i,j) = m_max - m(i,j)
+      end do
+    end do
+  else
+    work_m = m
+  end if
+
+  call initial_cover(d,work_m,u,v)
   if (verbose_flag) then
     write(*,*) "Initial cover:"
     write(*,'(A)',advance="no") " u ="
@@ -66,7 +97,7 @@ subroutine khun(d,m,ind,sum,verbose)
     write(*,*)
   end if
 
-  call compute_q(d,m,u,v,q)
+  call compute_q(d,work_m,u,v,q)
   if (verbose_flag) then
     write(*,*) "Qualification matrix q ="
     do i = 1, d
@@ -93,8 +124,8 @@ subroutine khun(d,m,ind,sum,verbose)
       write(*,*) "er = ", er
       write(*,*) "ec = ", ec
     end if
-    call routine_II(d,m,u,v,er,ec)
-    call compute_q(d,m,u,v,q)
+    call routine_II(d,work_m,u,v,er,ec)
+    call compute_q(d,work_m,u,v,q)
     if (verbose_flag) then
       write(*,*) "Qualification matrix q ="
       do i = 1, d

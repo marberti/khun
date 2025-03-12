@@ -9,15 +9,17 @@ program main
   integer, dimension(d) :: ind
   integer :: sum
   character(20) :: sum_str
+  character(3) :: mode
   integer :: i
   integer :: j
+
+  call get_command_argument(1,mode)
 
   do i = 1, d
     read(*,*) m(i,:)
   end do
 
-!  call khun(d,m,ind,sum,verbose=.true.)
-  call khun(d,m,ind,sum,verbose=.false.)
+  call khun(d,m,mode,ind,sum,verbose=.false.)
   write(*,'(20(I0.2))',advance="no") ind
   write(sum_str,*) sum
   sum_str = adjustl(sum_str)
