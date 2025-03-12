@@ -1,4 +1,5 @@
 *.o
+*.a
 *.mod
 *.x
 test/max/m
